@@ -1,0 +1,38 @@
+# Night Writer
+
+1. We can read a txt file and convert this into another txt file going from both
+alphanumeric characters to braille.
+2. Want to input a txt file and output a txt file. There should be two separate programs where one converts from alpha to braille and braille to alpha.
+3. empty input file -> different empty output file
+3a. empty input file -> different empty output file: print out size of files and name of newly generated file.
+4. input file with a single character -> outputs the single character on 3 lines (doesn't convert)
+5. a. input file with a single character -> outputs the single character on 3 lines (converts alphanumeric characters to braille)
+ b. input file with a single braille character (3 line read) -> prints on one line
+6. Pseudocode:
+There are two separate programs:
+
+night_write: Converts a message into Braille
+Get and open the message file
+Character by character in the file convert into Braille: one character to a three line implementation
+Get and open a file for writing (name is given by user)
+Write the Braille message:
+  Add each character to the Braille "line" until you reach 80 characters
+  Note: there will be a lowercase letter is 2 characters wide; uppercase letters are 4 characters wide, numbers are pre- and post-pended with a symbol (TRICKY!)
+  Print the up to 80 character Braille "line" in the file
+  Repeat until all characters in the message are outputted to file
+Close files
+Output to screen that you converted the number of characters in the message file
+
+night_read: Converts a Braille file into a message
+Get and open the Braille file
+Read the Braille lines (3 to 1):
+  Read three lines from the text,break into 2 character wide chunks and convert to letters: looking for capitalized letters and numbers signals
+Get and open the message file
+Write the message into the file
+Close files
+Output to screen that you converted the number of characters in the message file
+
+
+Issues to deal with:
+1. What do we deal with non-valid characters?
+2. merge into three: what if we don't have a multiple of three
