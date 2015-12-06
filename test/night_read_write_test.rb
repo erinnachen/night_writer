@@ -42,5 +42,4 @@ class NightWriterReaderTest < Minitest::Test
     `ruby night_write.rb rall_chars_read.txt rall_chars_write.txt`
   end
 
-
 end

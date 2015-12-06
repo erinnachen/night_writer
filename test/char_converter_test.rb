@@ -1,5 +1,6 @@
 require 'minitest'
 require_relative '../char_converter.rb'
+require 'pry'
 
 class CharConverterTest < Minitest::Test
   def test_looks_up_empty_string
@@ -189,16 +190,57 @@ class CharConverterTest < Minitest::Test
     skip
   end
 
-  def test_numbers
+  def test_switch_number_mode
     my_converter = CharConverter.new
-    skip
-    # assert_equal nil, my_converter.convert('0')
-    # assert_equal nil, my_converter.convert('1')
-    # assert_equal nil, my_converter.convert('35')
-    # assert_equal nil, my_converter.convert('56')
-    # assert_equal nil, my_converter.convert('8')
-    # assert_equal nil, my_converter.convert('7')
+    assert_equal false, my_converter.number_mode
+    my_converter.switch_number_mode
+    assert_equal true, my_converter.number_mode
+    my_converter.switch_number_mode
+    assert_equal false, my_converter.number_mode
   end
 
+  def test_is_a_digit
+    my_converter = CharConverter.new
+    dig = my_converter.char_is_digit?('1')
+    assert_equal true, dig
+    dig = my_converter.char_is_digit?('2')
+    assert_equal true, dig
+    dig = my_converter.char_is_digit?('3')
+    assert_equal true, dig
+    dig = my_converter.char_is_digit?('a')
+    assert_equal false, dig
+    dig = my_converter.char_is_digit?('abcd')
+    assert_equal false, dig
+    dig = my_converter.char_is_digit?('134')
+    assert_equal false, dig
+  end
+
+  def test_convert_a_single_number
+    my_converter = CharConverter.new
+    braille_num = my_converter.encode_message('1')
+    assert_equal [".00...",".0....","00...."], braille_num
+    braille_num = my_converter.encode_message('2')
+    assert_equal [".00...",".00...","00...."], braille_num
+    braille_num = my_converter.encode_message('3')
+    assert_equal [".000..",".0....","00...."], braille_num
+  end
+
+  def test_convert_multiple_numbers
+    my_converter = CharConverter.new
+    braille_num = my_converter.encode_message('45')
+    assert_equal [".0000...",".0.0.0..","00......"], braille_num
+    braille_num = my_converter.encode_message('67')
+    assert_equal [".00000..",".00.00..","00......"], braille_num
+    braille_num = my_converter.encode_message('890')
+    assert_equal [".00..0.0..",".0000.00..","00........"], braille_num
+  end
+
+  def test_convert_a_mix_of_letters_and_numbers
+    my_converter = CharConverter.new
+    mix_message = my_converter.encode_message('aA1')
+    assert_equal ["0...0..00...",".......0....","...0..00...."], mix_message
+    mix_message = my_converter.encode_message('3 days')
+    assert_equal [".000....000.00.0",".0.......0...00.","00..........000."], mix_message
+  end
 
 end

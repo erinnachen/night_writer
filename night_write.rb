@@ -34,7 +34,7 @@ class NightWriter
           b_lines[i] = b_lines[i][max_chars..-1]
         end
       end
-      output_line <<"#{b_lines[0]}\n#{b_lines[1]}\n#{b_lines[2]}\n"
+      output_line << b_lines.join("\n")+"\n"
     end
     output_line
   end

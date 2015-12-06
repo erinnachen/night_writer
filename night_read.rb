@@ -31,8 +31,6 @@ class NightReader
         (0..2).each {|j| merged_lines[j] << lines[i*3+j]}
       end
       merged_lines
-    else
-      nil
     end
   end
 
