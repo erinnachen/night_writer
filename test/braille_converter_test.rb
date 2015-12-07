@@ -1,5 +1,5 @@
 require 'minitest'
-require_relative '../braille_converter'
+require 'braille_converter'
 
 class BrailleConverterTest < Minitest::Test
   def test_load_br_message

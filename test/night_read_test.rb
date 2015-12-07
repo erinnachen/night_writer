@@ -1,5 +1,5 @@
 require 'minitest'
-require_relative '../night_read'
+require 'night_read'
 
 class NightReadTest < Minitest::Test
 
@@ -63,12 +63,12 @@ class NightReadTest < Minitest::Test
   end
 
   def test_hello_world_write
-    `rm hello_world.txt`
+    `rm rhello_world_out.txt`
     # Check if file does not exist
-    `ruby night_read.rb hello_world_braille.txt hello_world.txt`
+    `ruby lib/night_read.rb rhello_world.txt rhello_world_out.txt`
     # check if file exists
     assert_equal "hello world",
-    File.read("hello_world.txt")
+    File.read("rhello_world_out.txt")
   end
 
 end

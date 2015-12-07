@@ -1,5 +1,5 @@
 require 'minitest'
-require_relative '../char_converter.rb'
+require 'char_converter.rb'
 require 'pry'
 
 class CharConverterTest < Minitest::Test

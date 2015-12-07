@@ -1,5 +1,5 @@
 require 'minitest'
-require_relative '../night_write'
+require 'night_write'
 
 class NightWriteTest < Minitest::Test
   def test_encode_to_braille_single_letter
@@ -56,7 +56,7 @@ class NightWriteTest < Minitest::Test
   def test_hello_world_write
     `rm hello_world_braille.txt`
     # Check if file does not exist
-    `ruby night_write.rb hello_world.txt hello_world_braille.txt`
+    `ruby lib/night_write.rb hello_world.txt hello_world_braille.txt`
     # check if file exists
     assert_equal "0.0.0.0.0....00.0.0.00\n00.00.0..0..00.0000..0\n....0.0.0....00.0.0...\n",
     File.read("hello_world_braille.txt")
