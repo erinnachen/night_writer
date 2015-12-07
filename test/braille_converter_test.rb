@@ -37,14 +37,18 @@ class BrailleConverterTest < Minitest::Test
     assert_equal "r", my_converter.lookup_char("0.000.")
   end
 
-  def test_single_braille_uppercase_character
+  def test_braille_with_the_same_instring
     my_converter = BrailleConverter.new
-    assert_equal "A", my_converter.lookup_char(".....00.....")
-    assert_equal "B", my_converter.lookup_char(".....00.0...")
-    assert_equal "C", my_converter.lookup_char(".....000....")
-    assert_equal "D", my_converter.lookup_char(".....000.0..")
-    assert_equal "E", my_converter.lookup_char(".....00..0..")
-    assert_equal "F", my_converter.lookup_char(".....0000...")
+    assert_equal "a", my_converter.lookup_char("0.....")
+    my_converter.switch_cap_mode
+    assert_equal "A", my_converter.lookup_char("0.....")
+    assert_equal "a", my_converter.lookup_char("0.....")
+    my_converter.switch_num_mode
+    assert_equal "1", my_converter.lookup_char("0.....")
+    assert_equal "2", my_converter.lookup_char("0.0...")
+    assert_equal "3", my_converter.lookup_char("00....")
+    my_converter.switch_num_mode
+    assert_equal "d", my_converter.lookup_char("00.0..")
   end
 
   def test_single_braille_space
@@ -87,8 +91,9 @@ class BrailleConverterTest < Minitest::Test
     my_converter = BrailleConverter.new
     message = ['0...0.','......','...0..']
     my_converter.load_br_message(message)
+    assert_equal ['0...0.','......','...0..'], my_converter.br_message
     assert_equal "0.....", my_converter.get_next_char
-    assert_equal ".....00.....", my_converter.get_next_char
+    assert_equal "0.....", my_converter.get_next_char
     assert_equal nil, my_converter.get_next_char
     assert_equal false, my_converter.chars_left?
   end
@@ -114,7 +119,7 @@ class BrailleConverterTest < Minitest::Test
     assert_equal false, my_converter.chars_left?
   end
 
-  def test_converts_an_uppercase_characters
+  def test_converts_uppercase_characters
     my_converter = BrailleConverter.new
     message = ['..0...00','...0...0','.000.00.']
     assert_equal 'ZN', my_converter.convert_lines(message)
@@ -126,6 +131,34 @@ class BrailleConverterTest < Minitest::Test
     message = ["..............0.0.00000.00000..0.00.0.00000.00000..0.00.0..000000...0...0...00..00..0...00..00..0....0...0..0...0...00..00..0...00..00..0....0...0..0...0....0..00..00..0.","..00..0...000...0....0.00.00000.00..0....0.00.00000.00..0.00...0.0......0........0...0..0...00..00..0...00......0........0...0..0...00..00..0...00......0...00.......0...0","..0.0...00.000....................0.0.0.0.0.0.0.0.0.0.0000.0000000.0...0...0...0...0...0...0...0...0...0...00..00..00..00..00..00..00..00..00..00..000.000.0.0.000.000.000"]
     assert_equal " !',-.?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", my_converter.convert_lines(message)
     assert_equal false, my_converter.chars_left?
+  end
+
+  def test_converts_a_single_number
+    my_converter = BrailleConverter.new
+    assert my_converter.is_num_shift?(".0.000")
+    num = my_converter.convert_lines([".00...",".0....","00...."])
+    assert_equal '1', num
+    num = my_converter.convert_lines([".00...",".00...","00...."])
+    assert_equal '2', num
+
+  end
+
+  def test_convert_multiple_numbers
+    my_converter = BrailleConverter.new
+    num = my_converter.convert_lines([".0000...",".0.0.0..","00......"])
+    assert_equal '45', num
+    num = my_converter.convert_lines([".00000..",".00.00..","00......"])
+    assert_equal '67', num
+    num = my_converter.convert_lines([".00..0.0..",".0000.00..","00........"])
+    assert_equal '890', num
+  end
+
+  def test_convert_a_mix_of_letters_and_numbers
+    my_converter = BrailleConverter.new
+    mix_message = my_converter.convert_lines(["0...0..00...",".......0....","...0..00...."])
+    assert_equal 'aA1', mix_message
+    mix_message = my_converter.convert_lines( [".000....000.00.0",".0.......0...00.","00..........000."])
+    assert_equal '3 days', mix_message
   end
 
 end
